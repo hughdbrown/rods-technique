@@ -13,8 +13,8 @@ const NUM_ITEMS: usize = 15;
 
 const MIN_VALUE: u64 = 1;
 const MAX_VALUE: u64 = 12;
-const MIN_WEIGHT: u64 = 4;
-const MAX_WEIGHT: u64 = 15;
+const MIN_WEIGHT: usize = 4;
+const MAX_WEIGHT: usize = 15;
 const LIMIT_WEIGHT: usize = 100; 
 
 fn main() {

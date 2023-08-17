@@ -87,14 +87,24 @@ fn confirm_blocking(items: &[Item]) {
         let item_i = &items[i];
         for j in i+1..items.len() {
             let item_j = &items[j];
-            if item_i.value >= item_j.value && item_i.weight <= item_j.weight {
-                bad.push((i, j));
+            assert!(item_i.density() >= item_j.density());
+            if item_i.value == item_j.value {
+                // item[i] has to be lower weight for the same value
+                if item_i.weight > item_j.weight {
+                    bad.push((i, j));
+                }
+            }
+            else if item_i.weight == item_j.weight {
+                // item[i] has to be higher value for the same weight
+                if item_i.value < item_j.value {
+                    bad.push((i, j));
+                }
             }
         }
     }
     println!("Bad {:#?}", bad);
     for (left, right) in bad.iter() {
-        println!("({left}, {right}) Left {:?} Right {:?}", &items[left], &items[right]);
+        println!("({left}, {right}) Left {:?} Right {:?}", &items[*left], &items[*right]);
     }
 }
 
@@ -108,7 +118,7 @@ pub fn rods_technique(items: &[Item], limit_weight: usize) -> Result<SearchResul
     //    that would have blocked it.
     let path = vec![];
     let density_sorted_items: Vec<Item> = sort_by_density(items);
-    confirm_blocking(items);
+    confirm_blocking(&density_sorted_items);
     return rods_technique_helper(
         &density_sorted_items,
         0, // i = 0 (start at the first item)
