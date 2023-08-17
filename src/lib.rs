@@ -111,16 +111,19 @@ fn confirm_blocking(items: &[Item]) {
 }
 
 pub fn rods_technique(items: &[Item], limit_weight: usize) -> Result<SearchResult, ()> {
-    // Taking some liberties with the original algorithm and its data structures, but:
-    // 1. preservation of "blockage"
+    // Taking some liberties with the original algorithm and its data structures, but
+    // this code preserves "blockage" so it should be the same but with less bookkeeping,
+    // because:
+    //
     //    for all item[i] and item[j] if i < j:
     //    - if item[i].value == item[j].value then item[i].weight <= item[j].weight
-    //    - if item[i].weight == item[j].weight then item[i].value >= item[j].weight
-    //    No item that was blocked in the original algorithm can come before an item
-    //    that would have blocked it.
+    //    - if item[i].weight == item[j].weight then item[i].value >= item[j].value
+    //
+    // No item that was blocked in the original algorithm can be evaluated before an item that
+    // would have blocked it.
     let path = vec![];
     let density_sorted_items: Vec<Item> = sort_by_density(items);
-    confirm_blocking(&density_sorted_items);
+    // confirm_blocking(&density_sorted_items);
     return rods_technique_helper(
         &density_sorted_items,
         0, // i = 0 (start at the first item)
