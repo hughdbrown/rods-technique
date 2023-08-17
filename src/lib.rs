@@ -94,7 +94,7 @@ fn confirm_blocking(items: &[Item]) {
     }
     println!("Bad {:#?}", bad);
     for (left, right) in bad.iter() {
-        println!("Left {:?} Right {:?}", left, right);
+        println!("({left}, {right}) Left {:?} Right {:?}", &items[left], &items[right]);
     }
 }
 
