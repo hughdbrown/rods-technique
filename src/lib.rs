@@ -81,9 +81,34 @@ fn rods_technique_helper(
     }
 }
 
+fn confirm_blocking(items: &[Item]) {
+    let mut bad: Vec<(usize, usize)> = vec![];
+    for i in 0..items.len() {
+        let item_i = &items[i];
+        for j in i+1..items.len() {
+            let item_j = &items[j];
+            if item_i.value >= item_j.value && item_i.weight <= item_j.weight {
+                bad.push((i, j));
+            }
+        }
+    }
+    println!("Bad {:#?}", bad);
+    for (left, right) in bad.iter() {
+        println!("Left {:?} Right {:?}", left, right);
+    }
+}
+
 pub fn rods_technique(items: &[Item], limit_weight: usize) -> Result<SearchResult, ()> {
+    // Taking some liberties with the original algorithm and its data structures, but:
+    // 1. preservation of "blockage"
+    //    for all item[i] and item[j] if i < j:
+    //    - if item[i].value == item[j].value then item[i].weight <= item[j].weight
+    //    - if item[i].weight == item[j].weight then item[i].value >= item[j].weight
+    //    No item that was blocked in the original algorithm can come before an item
+    //    that would have blocked it.
     let path = vec![];
     let density_sorted_items: Vec<Item> = sort_by_density(items);
+    confirm_blocking(items);
     return rods_technique_helper(
         &density_sorted_items,
         0, // i = 0 (start at the first item)
@@ -94,8 +119,6 @@ pub fn rods_technique(items: &[Item], limit_weight: usize) -> Result<SearchResul
         0, // max_value seen on completed branch
         &path); // Current path (starts empty)
 }
-
-
 
 #[cfg(test)]
 mod tests {
