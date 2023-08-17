@@ -2,7 +2,10 @@
 name = "rods-technique"
 version = "0.1.0"
 edition = "2021"
+authors = ["Hugh Brown <hughdbrown@gmail.com>"]
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
+knapsack_utils = {git = "https://github.com/hughdbrown/knapsack_utils.git" }
+prng = {git = "https://github.com/hughdbrown/prng.git" }
